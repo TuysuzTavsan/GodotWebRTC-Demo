@@ -1,0 +1,196 @@
+[gd_scene load_steps=9 format=3 uid="uid://31ktsjhg7516"]
+
+[ext_resource type="Script" path="res://Scenes/main menu/main_menu.gd" id="1_883sy"]
+
+[sub_resource type="Theme" id="Theme_j7gqp"]
+default_font_size = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sk0ys"]
+bg_color = Color(0.596078, 0.560784, 0.882353, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l8008"]
+bg_color = Color(0.443137, 0.388235, 0.768627, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1al1l"]
+bg_color = Color(0.372549, 0.313726, 0.678431, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1kv6n"]
+bg_color = Color(0.596078, 0.560784, 0.882353, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jul45"]
+bg_color = Color(0.443137, 0.388235, 0.768627, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7tdid"]
+bg_color = Color(0.372549, 0.313726, 0.678431, 1)
+
+[node name="Main Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_883sy")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.192157, 0.192157, 0.192157, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 325.0
+offset_top = 265.0
+offset_right = -325.0
+offset_bottom = -265.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_j7gqp")
+theme_override_constants/separation = 10
+
+[node name="Username" type="LineEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+placeholder_text = "Type your name here"
+alignment = 1
+max_length = 15
+
+[node name="Play" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_sk0ys")
+theme_override_styles/hover = SubResource("StyleBoxFlat_l8008")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_1al1l")
+text = "PLAY"
+
+[node name="Quit" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_1kv6n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jul45")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7tdid")
+text = "QUIT"
+
+[node name="Loading" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Loading"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.105882, 0.105882, 0.105882, 0.858824)
+
+[node name="Label" type="Label" parent="Loading"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -505.0
+offset_top = -59.5
+offset_right = 505.0
+offset_bottom = 59.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.384314, 0.72549, 0.901961, 1)
+theme_override_font_sizes/font_size = 62
+text = "   connecting..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Connected" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Connected"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.105882, 0.105882, 0.105882, 0.858824)
+
+[node name="Label" type="Label" parent="Connected"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -505.0
+offset_top = -59.5
+offset_right = 505.0
+offset_bottom = 59.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.792157, 0.262745, 0.564706, 1)
+theme_override_font_sizes/font_size = 62
+text = "    Success!.."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Cannot Connect" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Cannot Connect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.105882, 0.105882, 0.105882, 0.858824)
+
+[node name="Label" type="Label" parent="Cannot Connect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -505.0
+offset_top = -59.5
+offset_right = 505.0
+offset_bottom = 59.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.901961, 0.133333, 0.235294, 1)
+theme_override_font_sizes/font_size = 62
+text = "   Failed to Connect!.."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="text_submitted" from="VBoxContainer/Username" to="." method="_on_username_text_submitted"]
+[connection signal="pressed" from="VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_quit_pressed"]

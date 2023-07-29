@@ -1,0 +1,187 @@
+[gd_scene load_steps=8 format=3 uid="uid://ru6r704auwky"]
+
+[ext_resource type="Script" path="res://Scenes/lobby_menu/lobby_menu.gd" id="1_3g2el"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k2py4"]
+bg_color = Color(0.105882, 0.105882, 0.105882, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y6w4r"]
+bg_color = Color(0.596078, 0.560784, 0.882353, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7cryh"]
+bg_color = Color(0.443137, 0.388235, 0.768627, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utrpq"]
+bg_color = Color(0.372549, 0.313726, 0.678431, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3bqir"]
+bg_color = Color(0.788235, 0.239216, 0.239216, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_367bd"]
+bg_color = Color(0.152941, 0.152941, 0.152941, 1)
+
+[node name="Lobby Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3g2el")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.192157, 0.192157, 0.192157, 1)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 87.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.384314, 0.72549, 0.901961, 1)
+theme_override_font_sizes/font_size = 35
+text = "CURRENT LOBBIES"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 216.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="List title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.941176, 0.176471, 0.419608, 1)
+theme_override_font_sizes/font_size = 30
+text = "Lobby Name"
+vertical_alignment = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_k2py4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Return" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -986.0
+offset_bottom = -639.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6w4r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7cryh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utrpq")
+text = "Return Main Menu"
+
+[node name="New_lobby" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.758462
+anchor_top = 0.291429
+anchor_right = 1.0
+anchor_bottom = 0.378571
+offset_left = -6.10352e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6w4r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7cryh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utrpq")
+text = "Create New Lobby"
+metadata/_edit_use_anchors_ = true
+
+[node name="Lobby_name" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 602.0
+offset_top = 204.0
+offset_right = 986.0
+offset_bottom = 265.0
+theme_override_font_sizes/font_size = 30
+placeholder_text = "Enter Lobby Name Here"
+alignment = 1
+max_length = 20
+
+[node name="Refresh" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 288.0
+offset_top = 204.0
+offset_right = -698.0
+offset_bottom = -435.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6w4r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7cryh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utrpq")
+text = "Refresh Lobby List"
+
+[node name="Lobby_template" type="Control" parent="."]
+visible = false
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+anchors_preset = 0
+offset_top = 265.0
+offset_right = 1300.0
+offset_bottom = 315.0
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="Lobby_template"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_3bqir")
+text = "Lobby name"
+vertical_alignment = 2
+
+[node name="Join" type="Button" parent="Lobby_template"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -399.0
+offset_top = -25.0
+offset_right = -22.0
+offset_bottom = 25.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.835294, 0.113725, 0.423529, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_367bd")
+text = "JOIN"
+
+[connection signal="pressed" from="Return" to="." method="_on_return_pressed"]
+[connection signal="pressed" from="New_lobby" to="." method="_on_new_lobby_pressed"]
+[connection signal="text_submitted" from="Lobby_name" to="." method="_on_lobby_name_text_submitted"]
+[connection signal="pressed" from="Refresh" to="." method="_on_refresh_pressed"]
