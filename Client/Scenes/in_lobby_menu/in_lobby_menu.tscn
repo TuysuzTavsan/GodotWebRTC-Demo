@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://c5rkwg5eys0i7"]
 
-[ext_resource type="Script" path="res://Scenes/in_lobby_menu/in_lobby_menu.gd" id="1_6ixmw"]
 [ext_resource type="Texture2D" uid="uid://bim8djyce1qbx" path="res://res/host.png" id="1_dgld7"]
+[ext_resource type="Script" path="res://Scenes/in_lobby_menu/in_lobby_menu.gd" id="1_q1ny1"]
 [ext_resource type="Texture2D" uid="uid://c351p80b4fgt" path="res://res/pawn.png" id="2_gtvi6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o8xuo"]
@@ -32,7 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_6ixmw")
+script = ExtResource("1_q1ny1")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
