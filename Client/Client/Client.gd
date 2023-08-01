@@ -5,7 +5,6 @@ enum Message {USER_NAME, LOBBY_LIST , NEW_LOBBY, JOIN_LOBBY, LEFT_LOBBY, LOBBY_M
 
 var rtc_mp = WebRTCMultiplayerPeer.new()
 var ws = WebSocketPeer.new()
-#var url = "ws://193.17.4.122:9999"
 var url = "ws://127.0.0.1:9999"
 var client_connected : bool = false
 
