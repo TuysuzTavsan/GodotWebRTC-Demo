@@ -26,7 +26,7 @@ func _some_one_left_lobby(other_player_name : String):
 	
 	var container = $Chat/ScrollContainer/VBoxContainer
 	
-	if User.is_host != true:
+	if not User.is_host:
 		User.is_host = true
 		User.init_connection()
 		var msg_node = $Message_template.duplicate()
@@ -69,8 +69,6 @@ func _on_return_pressed():
 	User.client.send_left_info(User.current_lobby_name)
 	await get_tree().create_timer(1).timeout
 	User.client.request_lobby_list()
-	User.client.get_tree().get_multiplayer().multiplayer_peer.close()
-	User.connection.close()
 	get_parent().add_child(lobby_menu_template.instantiate())
 	pop_up.queue_free()
 	queue_free()
@@ -108,16 +106,28 @@ func _initialize_host():
 	player2_character.set_multiplayer_authority(2)
 	player2_character.global_position = Vector2(347,37)
 	
+	for child in get_parent().get_children():
+		if child != self:
+			get_parent().remove_child(child)
+			child.queue_free()
+	
 	get_parent().add_child(game_scene)
+	player_character.name = "player_character"
 	get_parent().add_child(player_character)
+	player2_character.name = "player_character2"
 	get_parent().add_child(player2_character)
+	
 	print("initializing host")
+	
+	for child in get_parent().get_children():
+		print(child)
+	
 	queue_free()
 
 
 func _initialize_peer():
 	var game_scene = game_scene_template.instantiate()
-	game_scene.set_multiplayer_authority(1)
+	game_scene.set_multiplayer_authority(2)
 	
 	var player_character = player_character_template.instantiate()
 	player_character.set_multiplayer_authority(1)
@@ -126,10 +136,21 @@ func _initialize_peer():
 	player2_character.set_multiplayer_authority(2)
 	player2_character.global_position = Vector2(347,37)
 	
+	for child in get_parent().get_children():
+		if child != self:
+			get_parent().remove_child(child)
+			child.queue_free()
+	
 	get_parent().add_child(game_scene)
+	player_character.name = "player_character"
 	get_parent().add_child(player_character)
+	player2_character.name = "player_character2"
 	get_parent().add_child(player2_character)
 	print("initializing peer")
+	
+	for child in get_parent().get_children():
+		print(child)
+	
 	queue_free()
 
 

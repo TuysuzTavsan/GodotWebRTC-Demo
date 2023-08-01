@@ -29,7 +29,7 @@ func init_connection():
 	if is_host:
 		rtc_peer.create_server()
 		rtc_peer.add_peer(connection, 2)
-		client.get_tree().set_multiplayer(MultiplayerAPI.create_default_interface())
+		#client.get_tree().set_multiplayer(MultiplayerAPI.create_default_interface())
 		rtc_peer.peer_connected.connect(_peer_connected)
 		rtc_peer.peer_disconnected.connect(_peer_disconnected)
 		client.get_tree().get_multiplayer().multiplayer_peer = rtc_peer
@@ -38,9 +38,8 @@ func init_connection():
 		rtc_peer.add_peer(connection, 1)
 		rtc_peer.peer_connected.connect(_peer_connected)
 		rtc_peer.peer_disconnected.connect(_peer_disconnected)
-		client.get_tree().set_multiplayer(MultiplayerAPI.create_default_interface())
+		#client.get_tree().set_multiplayer(MultiplayerAPI.create_default_interface())
 		client.get_tree().get_multiplayer().multiplayer_peer = rtc_peer
-		#if not client.get_tree().get_multiplayer().connected_to_server.is_connected(_connected_to_host):
 		client.get_tree().get_multiplayer().connected_to_server.connect(_connected_to_host)
 
 
