@@ -97,59 +97,37 @@ func _on_start_pressed():
 
 func _initialize_host():
 	var game_scene = game_scene_template.instantiate()
-	game_scene.set_multiplayer_authority(1)
-	
 	var player_character = player_character_template.instantiate()
-	player_character.set_multiplayer_authority(1)
-	player_character.global_position = Vector2(-344,41)
 	var player2_character = player_character_template.instantiate()
+	game_scene.set_multiplayer_authority(1)
+	player_character.set_multiplayer_authority(1)
 	player2_character.set_multiplayer_authority(2)
+	player_character.global_position = Vector2(-344,41)
 	player2_character.global_position = Vector2(347,37)
-	
-	for child in get_parent().get_children():
-		if child != self:
-			get_parent().remove_child(child)
-			child.queue_free()
-	
-	get_parent().add_child(game_scene)
 	player_character.name = "player_character"
-	get_parent().add_child(player_character)
 	player2_character.name = "player_character2"
+	get_parent().add_child(game_scene)
+	get_parent().add_child(player_character)
 	get_parent().add_child(player2_character)
-	
-	print("initializing host")
-	
-	for child in get_parent().get_children():
-		print(child)
+
 	
 	queue_free()
 
 
 func _initialize_peer():
 	var game_scene = game_scene_template.instantiate()
-	game_scene.set_multiplayer_authority(2)
-	
 	var player_character = player_character_template.instantiate()
-	player_character.set_multiplayer_authority(1)
-	player_character.global_position = Vector2(-344,41)
 	var player2_character = player_character_template.instantiate()
+	game_scene.set_multiplayer_authority(1)
+	player_character.set_multiplayer_authority(1)
 	player2_character.set_multiplayer_authority(2)
+	player_character.global_position = Vector2(-344,41)
 	player2_character.global_position = Vector2(347,37)
-	
-	for child in get_parent().get_children():
-		if child != self:
-			get_parent().remove_child(child)
-			child.queue_free()
-	
-	get_parent().add_child(game_scene)
 	player_character.name = "player_character"
-	get_parent().add_child(player_character)
 	player2_character.name = "player_character2"
+	get_parent().add_child(game_scene)
+	get_parent().add_child(player_character)
 	get_parent().add_child(player2_character)
-	print("initializing peer")
-	
-	for child in get_parent().get_children():
-		print(child)
 	
 	queue_free()
 

@@ -8,7 +8,9 @@ var anim_player
 var attack_state : bool = false
 var attack_count : int = 1
 var attack_timer : int = 0
-
+var dead : bool = false;
+@onready var health = $Control/VBoxContainer/Control/TextureProgressBar
+@onready var original_anim_tree = $AnimationTree
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -31,7 +33,7 @@ func _process(delta):
 	set_animation()
 
 func check_health():
-	if $Control/VBoxContainer/Control/TextureProgressBar.value <= 0:
+	if health.value <= 0:
 		die.rpc()
 
 func _physics_process(delta):
@@ -105,6 +107,7 @@ func die():
 	anim_player.play("Dead")
 	set_physics_process(false)
 	set_process(false)
+	dead = true;
 
 @rpc("any_peer","call_remote","reliable")
 func sync_animation(anim_name: StringName):
@@ -118,7 +121,7 @@ func sync_flip(dir : int):
 @rpc("any_peer","call_local","reliable")
 func hit_received():
 	anim_tree.start("Hurt", true)
-	$Control/VBoxContainer/Control/TextureProgressBar.value -= 5
+	health.value -= 5
 
 func _on_area_2d_body_entered(body):
 	if body != self:

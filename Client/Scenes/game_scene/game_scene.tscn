@@ -1,5 +1,6 @@
-[gd_scene load_steps=16 format=3 uid="uid://chvj808e8555p"]
+[gd_scene load_steps=17 format=3 uid="uid://chvj808e8555p"]
 
+[ext_resource type="Script" path="res://Scenes/game_scene/game_scene.gd" id="1_i826j"]
 [ext_resource type="Texture2D" uid="uid://j2csvjjxlbal" path="res://res/islands_1.png" id="2_bjrr4"]
 [ext_resource type="Texture2D" uid="uid://ba64v2bpw4gyc" path="res://res/sky_.png" id="3_ib4m3"]
 [ext_resource type="Texture2D" uid="uid://c0523jhkhojw8" path="res://res/waterfalls_0_0.png" id="4_5e6x0"]
@@ -1150,6 +1151,7 @@ sources/6 = SubResource("TileSetAtlasSource_iintb")
 sources/1 = SubResource("TileSetAtlasSource_fd4fk")
 
 [node name="Game Loop" type="Node"]
+script = ExtResource("1_i826j")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_l8xdj")
