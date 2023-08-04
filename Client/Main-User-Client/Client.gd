@@ -1,7 +1,7 @@
 extends Node
 class_name Client
 
-enum Message {USER_NAME, LOBBY_LIST , NEW_LOBBY, JOIN_LOBBY, LEFT_LOBBY, LOBBY_MESSAGE, START_GAME, OFFER, ANSWER, ICE}
+enum Message {USER_INFO, LOBBY_LIST , NEW_LOBBY, JOIN_LOBBY, LEFT_LOBBY, LOBBY_MESSAGE, START_GAME, OFFER, ANSWER, ICE}
 
 var rtc_mp = WebRTCMultiplayerPeer.new()
 var ws = WebSocketPeer.new()
@@ -58,20 +58,31 @@ func _process(delta):
 
 func parse_msg():
 	var parsed = JSON.parse_string(ws.get_packet().get_string_from_utf8())
-	if typeof(parsed) != TYPE_DICTIONARY or not parsed.has("type") or not parsed.has("id") or \
-	typeof(parsed.get("data")) != TYPE_STRING:
+	
+	if not typeof(parsed) == TYPE_DICTIONARY \
+	or not parsed.has("type") \
+	or not parsed.has("id") \
+	or not parsed.has("data"):
 		return false
 	
-	var msg := parsed as Dictionary
-	if not str(msg.type).is_valid_int() or not str(msg.id).is_valid_int():
+	var msg = {
+		"type": str(parsed.type).to_int(),
+		"id": str(parsed.id).to_int(),
+		"data": parsed.data
+	}
+	
+	if not str(msg.type).is_valid_int() \
+	or not str(msg.id).is_valid_int():
 		return false
 	
 	var type := str(msg.type).to_int()
-	var src_id := str(msg.id).to_int()
+	var id := str(msg.id).to_int()
 	var data : String = str(msg.data)
 	
-	if type == Message.USER_NAME:
+	if type == Message.USER_INFO:
 		User.user_name = data
+		User.ID = id
+		print("Received User name = %s ID# %s" %[data, id])
 		user_name_feedback_received.emit()
 		client_connected = true
 	
@@ -106,19 +117,23 @@ func parse_msg():
 			return
 	
 	if type == Message.JOIN_LOBBY:
-		if src_id == 0:
-			if data == "INVALID":
-				invalid_join_lobby_name.emit()
-				return
-			else:
-				join_lobby.emit(data)
-				return
-		if  src_id == 1:
-			other_user_joined_lobby.emit(data)
+		if data.contains("INVALID"):
+			invalid_join_lobby_name.emit()
 			return
-		if  src_id == 2:
-			host_name_received.emit(data)
+		if data.contains("LOBBY_NAME"):
+			join_lobby.emit(data.right(-10))
 			return
+		if data.contains("HOST_NAME"):
+			host_name_received.emit(data.right(-9))
+			User.peers[id] = data.right(-9)
+			print("Peer name: %s with ID # %s added to the list." %[data.right(-9), id])
+			return
+		if data.contains("NEW_JOINED_USER_NAME"):
+			other_user_joined_lobby.emit(data.right(-20))
+			User.peers[id] = data.right(-20)
+			print("Peer name: %s with ID # %s added to the list." %[data.right(-20), id])
+			return
+		return
 	
 	if type == Message.LOBBY_LIST:
 		if data == "":
@@ -133,8 +148,12 @@ func parse_msg():
 			return
 	
 	if type == Message.LEFT_LOBBY:
-		some_one_left_lobby.emit(data)
-		print("Player: %s left this lobby !" %data)
+		
+		if User.peers.has(id):
+			User.peers.erase(id)
+			some_one_left_lobby.emit(data)
+			print("Peer name: %s with ID # %s erased from the list" %[data, id])
+		
 		return
 	
 	if type == Message.LOBBY_MESSAGE:
@@ -161,7 +180,7 @@ func is_client_connected() -> bool:
 
 
 func send_user_name(_name : String):
-	send_msg(Message.USER_NAME, 0, _name)
+	send_msg(Message.USER_INFO, 0, _name)
 
 func request_lobby_list():
 	send_msg(Message.LOBBY_LIST, 0, "")

@@ -6,6 +6,8 @@ var other_user_name : String = "Empty Slot"
 var current_lobby_name : String = ""
 var current_lobby_list : String = ""
 var is_host : bool = false
+var ID = -1
+var peers : Dictionary
 
 var connection : WebRTCPeerConnection
 var rtc_peer : WebRTCMultiplayerPeer
@@ -27,13 +29,13 @@ func init_connection():
 	connection.session_description_created.connect(session_created)
 	connection.ice_candidate_created.connect(ice_created)
 	if is_host:
-		rtc_peer.create_server()
+		rtc_peer.create_mesh(1);
 		rtc_peer.add_peer(connection, 2)
 		rtc_peer.peer_connected.connect(_peer_connected)
 		rtc_peer.peer_disconnected.connect(_peer_disconnected)
 		client.get_tree().get_multiplayer().multiplayer_peer = rtc_peer
 	else:
-		rtc_peer.create_client(2)
+		rtc_peer.create_mesh(2)
 		rtc_peer.add_peer(connection, 1)
 		rtc_peer.peer_connected.connect(_peer_connected)
 		rtc_peer.peer_disconnected.connect(_peer_disconnected)
@@ -93,4 +95,7 @@ func reset_connection():
 	current_lobby_name = ""
 	other_user_name = "Empty Slot"
 	print("User reset!")
+	ID = -1
+	peers.clear()
 	reset.emit()
+

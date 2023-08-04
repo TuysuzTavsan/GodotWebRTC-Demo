@@ -66,6 +66,7 @@ func _on_return_pressed():
 	pop_up.is_button_visible(false)
 	add_child(pop_up)
 	User.is_host = false
+	User.peers.clear()
 	User.client.send_left_info(User.current_lobby_name)
 	await get_tree().create_timer(1).timeout
 	User.client.request_lobby_list()
