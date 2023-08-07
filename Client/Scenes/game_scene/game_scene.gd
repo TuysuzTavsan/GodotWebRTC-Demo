@@ -1,48 +1,29 @@
 extends Node
-var peers = []
-var game_reset_count : int = 3
 
-# Called when the node enters the scene tree for the first time.
+var pop_up_template = preload("res://Scenes/pop_up/pop_up.tscn")
+var start_time : float = 5.0
+var pop_up
+
 func _ready():
-	if not User.is_host:
-		set_process(false)
-	
-	await get_tree().create_timer(3).timeout
-	peers.push_back(get_node("../player_character"))
-	peers.push_back(get_node("../player_character2"))
+	pop_up = pop_up_template.instantiate()
+	pop_up.name = "pop_up"
+	pop_up.set_msg("5")
+	pop_up.is_button_visible(false)
+	add_child(pop_up)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	var second_left : float = start_time - delta
+	start_time -= delta
+	pop_up.set_msg(str(floor(second_left)))
 	
-	for peer in peers:
-		if peer.dead:
-			await get_tree().create_timer(3).timeout
-			reset_game.rpc()
-			reset_dead_player.rpc()
+	if start_time <= 0:
+		set_process(false)
+		get_node("pop_up").queue_free()
 
-@rpc("any_peer","call_local","reliable")
-func reset_dead_player():
-	for peer in peers:
-		if peer.dead:
-			if peer.get_multiplayer_authority() == (1 if User.is_host else 2):
-				peer.dead = false
-				peer.health.value = 100
-				peer.original_anim_tree.set_active(true)
-				peer.anim_tree.travel("Idle")
-				peer.set_physics_process(true)
-				peer.set_process(true)
-				print("I am the player")
-			else:
-				peer.dead = false
-				peer.health.value = 100
-				peer.original_anim_tree.set_active(true)
-				peer.anim_tree.travel("Idle")
+func _on_button_pressed():
+	User.reset_connection()
+	
+	for child in get_children():
+		child.queue_free()
 
-@rpc("any_peer","call_local","reliable")
-func reset_game():
-		for peer in peers:
-			if peer.multiplayer.get_unique_id() == 1:
-				peer.global_position = Vector2(-344,41)
-			if peer.multiplayer.get_unique_id() == 2:
-				peer.global_position = Vector2(347,37)

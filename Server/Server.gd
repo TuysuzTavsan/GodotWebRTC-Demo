@@ -1,6 +1,7 @@
 extends Node
 
-enum Message {USER_INFO, LOBBY_LIST , NEW_LOBBY, JOIN_LOBBY, LEFT_LOBBY, LOBBY_MESSAGE, START_GAME, OFFER, ANSWER, ICE}
+enum Message {USER_INFO, LOBBY_LIST , NEW_LOBBY, JOIN_LOBBY, LEFT_LOBBY, LOBBY_MESSAGE, \
+START_GAME, OFFER, ANSWER, ICE, GAME_STARTING, HOST}
 
 var server = TCPServer.new()
 var hard_coded_port = 9999
@@ -52,7 +53,7 @@ func _process(delta):
 
 func poll():
 	if server.is_connection_available():
-		var id = randi()
+		var id = randi() % (1 << 31)
 		peers[id] = Peer.new(id, server.take_connection())
 	
 	for p in peers.values():
@@ -96,20 +97,53 @@ func parse_msg(peer : Peer) -> bool:
 	var data : String = str(accepted_msg.data)
 	
 	
+	if type == Message.GAME_STARTING:
+		var current_lobby = find_lobby_by_peer(peer)
+		if current_lobby:
+			var all_peer_ids : String = ""
+			for player in current_lobby.peers:
+				all_peer_ids += str(player.id) + "***"
+			
+			for player in current_lobby.peers:
+				player.send_msg(Message.GAME_STARTING, 0 , all_peer_ids)
+			
+		return true
+	
 	if type == Message.OFFER:
-		find_other_peer(peer).send_msg(Message.OFFER, 0, data)
-		print("Sending received offer !")
-		return true
-	
+		var str_arr = data.split("***", true , 2)
+		var send_to_id = str_arr[2].to_int()
+		var receiver_peer = find_peer_by_id(send_to_id)
+		if receiver_peer:
+			receiver_peer.send_msg(type, peer.id, data)
+			print("Sending received OFFER! to peer %d" %peer.id)
+			return true
+		else:
+			print("ERROR: OFFER received but ID do not match with any peer!")
+			return false
+			
 	if type == Message.ANSWER:
-		find_other_peer(peer).send_msg(Message.ANSWER, 0, data)
-		print("Sending received answer!")
-		return true
-	
+		var str_arr = data.split("***", true , 2)
+		var send_to_id = str_arr[2].to_int()
+		var receiver_peer = find_peer_by_id(send_to_id)
+		if receiver_peer:
+			receiver_peer.send_msg(type, peer.id, data)
+			print("Sending received ANSWER! to peer %d" %peer.id)
+			return true
+		else:
+			print("ERROR: ANSWER received but ID do not match with any peer!")
+			return false
+			
 	if type == Message.ICE:
-		find_other_peer(peer).send_msg(Message.ICE, 0, data)
-		print("Sending received ICE!")
-		return true
+		var str_arr = data.split("***", true , 3)
+		var send_to_id = str_arr[3].to_int()
+		var receiver_peer = find_peer_by_id(send_to_id)
+		if receiver_peer:
+			receiver_peer.send_msg(type, peer.id, data)
+			print("Sending received ICE! to peer %d" %peer.id)
+			return true
+		else:
+			print("ERROR: ICE received but ID do not match with any peer!")
+			return false
 	
 	if type == Message.LEFT_LOBBY:
 		var lobby = find_lobby_by_name(data)
@@ -120,6 +154,7 @@ func parse_msg(peer : Peer) -> bool:
 			elif  lobby.peers.size() > 1:
 					var delete_after : Peer
 					for lobby_peer in lobby.peers:
+							lobby_peer.is_host = false
 							if lobby_peer.user_name != peer.user_name:
 								lobby_peer.send_msg(Message.LEFT_LOBBY, peer.id, peer.user_name)
 							if lobby_peer.user_name == peer.user_name:
@@ -127,6 +162,9 @@ func parse_msg(peer : Peer) -> bool:
 					
 					lobby.peers.erase(delete_after)
 					lobby.peers[0].is_host = true
+					
+					for player in lobby.peers:
+						player.send_msg(Message.HOST, lobby.peers[0].id, lobby.peers[0].user_name)
 			return true
 	
 	if type == Message.USER_INFO:
@@ -167,11 +205,12 @@ func parse_msg(peer : Peer) -> bool:
 		
 		var lobby = find_lobby_by_name(data)
 		if lobby:
-			peer.send_msg(Message.JOIN_LOBBY, lobby.peers[0].id, "HOST_NAME" + lobby.peers[0].user_name)
+			peer.send_msg(Message.HOST, lobby.peers[0].id, lobby.peers[0].user_name)
 			peer.send_msg(Message.JOIN_LOBBY, 0, "LOBBY_NAME" + lobby._name)
 			
 			for lobby_player in lobby.peers:
 				lobby_player.send_msg(Message.JOIN_LOBBY, peer.id, "NEW_JOINED_USER_NAME" + peer.user_name)
+				peer.send_msg(Message.JOIN_LOBBY, lobby_player.id, "EXISTING_USER_NAME" + lobby_player.user_name)
 			
 			lobby.peers.push_back(peer)
 			print("Join lobby request received! Requested name: %s" %data)
@@ -222,12 +261,12 @@ func clean_up():
 			to_remove_lobbys.push_back(searched_lobby)
 
 
-func find_other_peer(peer : Peer):
-	for i in lobbies:
-		if i.peers.has(peer) and i.peers.size() == 2:
-			for a in i.peers:
-				if a != peer:
-					return a
+func find_peer_by_id(id):
+	for peer_id in peers.keys():
+		if id == peer_id:
+			return peers[peer_id]
+	
+	return false
 
 func find_lobby_by_peer(peer : Peer):
 	for lobby in lobbies:

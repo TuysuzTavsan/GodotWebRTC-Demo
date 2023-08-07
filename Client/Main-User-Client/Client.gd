@@ -1,7 +1,8 @@
 extends Node
 class_name Client
 
-enum Message {USER_INFO, LOBBY_LIST , NEW_LOBBY, JOIN_LOBBY, LEFT_LOBBY, LOBBY_MESSAGE, START_GAME, OFFER, ANSWER, ICE}
+enum Message {USER_INFO, LOBBY_LIST , NEW_LOBBY, JOIN_LOBBY, LEFT_LOBBY, LOBBY_MESSAGE, \
+START_GAME, OFFER, ANSWER, ICE, GAME_STARTING, HOST}
 
 var rtc_mp = WebRTCMultiplayerPeer.new()
 var ws = WebSocketPeer.new()
@@ -20,6 +21,8 @@ signal some_one_left_lobby(player_name : String)
 signal offer_received(type: String, sdp: String)
 signal answer_received(type: String, sdp: String)
 signal ice_received(media: String, index: int, _name: String)
+signal game_start_received(arr : String)
+signal server_changed_host()
 signal user_name_feedback_received
 signal reset_connection
 
@@ -85,27 +88,40 @@ func parse_msg():
 		print("Received User name = %s ID# %s" %[data, id])
 		user_name_feedback_received.emit()
 		client_connected = true
+		return
+	
+	if type == Message.HOST:
+		if id == User.ID and data == User.user_name:
+			User.is_host = true
+		else:
+			User.is_host = false
+			User.host_name = data
+		server_changed_host.emit()
+		return
 	
 	if type == Message.ICE:
-		var str_arr = data.split("***", true , 2)
+		var str_arr = data.split("***", true , 3)
 		var media : String = str_arr[0]
 		var index : int = int(str_arr[1])
 		var _name : String = str_arr[2]
-		ice_received.emit(media, index, _name)
+		var sender_id = id
+		ice_received.emit(media, index, _name, sender_id)
 		return
 	
 	if type == Message.ANSWER:
-		var str_arr = data.split("***", true , 1)
+		var str_arr = data.split("***", true , 2)
 		var _type : String = str_arr[0]
 		var sdp : String = str_arr[1]
-		answer_received.emit(_type, sdp)
+		var sender_id = id
+		answer_received.emit(_type, sdp, sender_id)
 		return
 	
 	if type == Message.OFFER:
-		var str_arr = data.split("***", true , 1)
+		var str_arr = data.split("***", true , 2)
 		var _type : String = str_arr[0]
 		var sdp : String = str_arr[1]
-		offer_received.emit(_type, sdp)
+		var sender_id = id
+		offer_received.emit(_type, sdp, sender_id)
 		return
 	
 	if type == Message.NEW_LOBBY:
@@ -123,15 +139,15 @@ func parse_msg():
 		if data.contains("LOBBY_NAME"):
 			join_lobby.emit(data.right(-10))
 			return
-		if data.contains("HOST_NAME"):
-			host_name_received.emit(data.right(-9))
-			User.peers[id] = data.right(-9)
-			print("Peer name: %s with ID # %s added to the list." %[data.right(-9), id])
-			return
 		if data.contains("NEW_JOINED_USER_NAME"):
-			other_user_joined_lobby.emit(data.right(-20))
 			User.peers[id] = data.right(-20)
+			other_user_joined_lobby.emit(data.right(-20))
 			print("Peer name: %s with ID # %s added to the list." %[data.right(-20), id])
+			return
+		if data.contains("EXISTING_USER_NAME"):
+			User.peers[id] = data.right(-18)
+			other_user_joined_lobby.emit(data.right(-18))
+			print("Peer name: %s with ID # %s added to the list." %[data.right(-18), id])
 			return
 		return
 	
@@ -162,6 +178,15 @@ func parse_msg():
 		var user_name = arr[0]
 		var message = arr[1]
 		lobby_messsage_received.emit(message, user_name)
+		return
+	
+	if type == Message.GAME_STARTING:
+		var string = data.get_slice(str(User.ID), 1)
+		if not string == "":
+			game_start_received.emit(string)
+		return
+	
+	
 	
 	
 	return false
@@ -204,11 +229,14 @@ func send_left_info(lobby_name : String):
 func send_start_game(lobby_name : String):
 	send_msg(Message.START_GAME, 0, lobby_name)
 
-func send_offer(type: String, sdp: String):
-	send_msg(Message.OFFER, 0, type + "***" + sdp)
+func send_offer(type: String, sdp: String, id):
+	send_msg(Message.OFFER, 0, type + "***" + sdp + "***" + str(id))
 
-func send_answer(type: String, sdp: String):
-	send_msg(Message.ANSWER, 0, type + "***" + sdp)
+func send_answer(type: String, sdp: String, id):
+	send_msg(Message.ANSWER, 0, type + "***" + sdp + "***" + str(id))
 
-func send_ice(media: String, index: int, _name: String):
-	send_msg(Message.ICE, 0, media + "***" + str(index) + "***" + _name )
+func send_ice(media: String, index: int, _name: String, id):
+	send_msg(Message.ICE, 0, media + "***" + str(index) + "***" + _name + "***" + str(id))
+
+func send_game_starting():
+	send_msg(Message.GAME_STARTING, User.ID, "")

@@ -11,7 +11,7 @@ func _init():
 	User.client.invalid_join_lobby_name.connect(invalid_join_lobby_name)
 	User.client.join_lobby.connect(_join_lobby)
 	User.client.new_lobby.connect(_new_lobby)
-	User.client.host_name_received.connect(_host_name_received)
+
 
 func invalid_join_lobby_name():
 	var pop_up = pop_up_template.instantiate()
@@ -22,20 +22,13 @@ func invalid_join_lobby_name():
 	await get_tree().create_timer(1).timeout
 	pop_up.queue_free()
 
-
-func _host_name_received(hostname : String):
-	User.other_user_name = hostname
-
 func _join_lobby(lobby_name : String):
 	var pop_up = pop_up_template.instantiate()
 	pop_up.set_msg("   Joining lobby...")
 	pop_up.is_button_visible(false)
 	add_child(pop_up)
-	await get_tree().create_timer(1).timeout
-	
-	User.init_connection()
-	print("joined lobby %s !" %lobby_name)
 	User.current_lobby_name = lobby_name
+	print("joined lobby %s !" %lobby_name)
 	get_parent().add_child(in_lobby_menu_template.instantiate())
 	queue_free()
 
@@ -44,10 +37,7 @@ func _new_lobby(lobby_name : String):
 	pop_up.set_msg("   Creating new lobby...")
 	pop_up.is_button_visible(false)
 	add_child(pop_up)
-	await get_tree().create_timer(1).timeout
-	
 	User.is_host = true
-	User.init_connection()
 	User.current_lobby_name = lobby_name
 	print("new lobby created %s !" %lobby_name)
 	get_parent().add_child(in_lobby_menu_template.instantiate())

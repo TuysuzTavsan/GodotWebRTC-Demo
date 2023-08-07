@@ -3,34 +3,54 @@ extends CharacterBody2D
 
 const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
-var anim_tree
-var anim_player
 var attack_state : bool = false
 var attack_count : int = 1
 var attack_timer : int = 0
-var dead : bool = false;
 @onready var health = $Control/VBoxContainer/Control/TextureProgressBar
 @onready var original_anim_tree = $AnimationTree
-
+@onready var anim_tree = $AnimationTree.get("parameters/playback")
+@onready var anim_player = $AnimationPlayer
+@onready var character_name = $Control/VBoxContainer/Control2/Label
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready():
-	anim_tree = $AnimationTree.get("parameters/playback")
-	anim_player = $AnimationPlayer
-	
-	if get_multiplayer_authority() == (1 if User.is_host else 2):
-		$Camera2D.enabled = true
-		$Control/VBoxContainer/Control2/Label.text = User.user_name
-	else:
-		$Control/VBoxContainer/Control2/Label.text = User.other_user_name
-		set_physics_process(false)
-		set_process(false)
-		set_process_input(false)
+	reset()
 
 func _process(delta):
 	check_health()
 	set_animation()
+
+func reset():
+	set_physics_process(false)
+	set_process(false)
+	set_process_input(false)
+	
+	await get_tree().create_timer(5).timeout
+	
+	$AnimationTree.set_active(true)
+	health.value = 100
+	if get_multiplayer_authority() == (User.ID):
+		$AnimationTree.set_active(true)
+		$Camera2D.enabled = true
+		character_name.text = User.user_name
+		set_physics_process(true)
+		set_process_input(true)
+		set_process(true)
+		set_player_name.rpc(User.user_name)
+		global_position = Vector2(randi_range(-200, 200), randi_range(0, 75))
+	else:
+		character_name.text = "Other player"
+		set_physics_process(false)
+		set_process(false)
+		set_process_input(false)
+
+
+
+@rpc("any_peer","call_remote","reliable")
+func set_player_name(_name : String):
+	await get_tree().create_timer(2).timeout
+	character_name.text = _name
 
 func check_health():
 	if health.value <= 0:
@@ -107,7 +127,8 @@ func die():
 	anim_player.play("Dead")
 	set_physics_process(false)
 	set_process(false)
-	dead = true;
+	
+	reset()
 
 @rpc("any_peer","call_remote","reliable")
 func sync_animation(anim_name: StringName):

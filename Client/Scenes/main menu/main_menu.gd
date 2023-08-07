@@ -21,6 +21,8 @@ func _on_play_pressed():
 		return
 		
 	else:
+		if User.client:
+			User.client.queue_free()
 		User.client = Client.new()
 		get_parent().add_child(User.client)
 		control_flag = true

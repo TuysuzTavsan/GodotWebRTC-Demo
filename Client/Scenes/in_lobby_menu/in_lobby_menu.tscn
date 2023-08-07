@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://c5rkwg5eys0i7"]
 
+[ext_resource type="Script" path="res://Scenes/in_lobby_menu/in_lobby_menu.gd" id="1_1jabt"]
 [ext_resource type="Texture2D" uid="uid://bim8djyce1qbx" path="res://res/host.png" id="1_dgld7"]
-[ext_resource type="Script" path="res://Scenes/in_lobby_menu/in_lobby_menu.gd" id="1_q1ny1"]
 [ext_resource type="Texture2D" uid="uid://c351p80b4fgt" path="res://res/pawn.png" id="2_gtvi6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o8xuo"]
@@ -13,14 +13,14 @@ bg_color = Color(0.443137, 0.388235, 0.768627, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2vis2"]
 bg_color = Color(0.372549, 0.313726, 0.678431, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cix6r"]
-bg_color = Color(0.121569, 0.121569, 0.121569, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_50adl"]
 bg_color = Color(0.0941176, 0.0941176, 0.0941176, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r4331"]
 bg_color = Color(0.0941176, 0.0941176, 0.0941176, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cix6r"]
+bg_color = Color(0.121569, 0.121569, 0.121569, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b3vu7"]
 bg_color = Color(0.121569, 0.121569, 0.121569, 1)
@@ -32,7 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_q1ny1")
+script = ExtResource("1_1jabt")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -118,6 +118,57 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_1e8h8")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_2vis2")
 text = "START GAME"
 
+[node name="Host_template" type="HBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+offset_top = 393.0
+offset_right = 118.0
+offset_bottom = 543.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Name" type="Label" parent="Host_template"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_50adl")
+text = "Player 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Host_template"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_dgld7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Player_template" type="HBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+offset_top = 393.0
+offset_right = 582.0
+offset_bottom = 543.0
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="Player_template"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_r4331")
+text = "Empty Slot"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Player_template"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("2_gtvi6")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Player List" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -147,47 +198,13 @@ text = "PLAYER LIST"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="Player1" type="HBoxContainer" parent="Player List/Players"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Player List/Players"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_vertical = 3
 
-[node name="Name" type="Label" parent="Player List/Players/Player1"]
-custom_minimum_size = Vector2(0, 150)
+[node name="VBoxContainer" type="VBoxContainer" parent="Player List/Players/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = SubResource("StyleBoxFlat_50adl")
-text = "Player 1"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Icon" type="TextureRect" parent="Player List/Players/Player1"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("1_dgld7")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Player2" type="HBoxContainer" parent="Player List/Players"]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="Name" type="Label" parent="Player List/Players/Player2"]
-custom_minimum_size = Vector2(0, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = SubResource("StyleBoxFlat_r4331")
-text = "Player 2"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Icon" type="TextureRect" parent="Player List/Players/Player2"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("2_gtvi6")
-expand_mode = 1
-stretch_mode = 5
 
 [node name="Chat" type="VBoxContainer" parent="."]
 layout_mode = 1
