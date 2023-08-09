@@ -15,6 +15,7 @@ Project files include webrtc extension for 4.0.3 if you want to use different ve
 -------------------------------
 
 
+
 Code is designed to support mesh network.
 When the lobby owner starts game, server will send each pear which peers it needs to establish connection.
 We store multiplayer information on a global singleton == User.gd
