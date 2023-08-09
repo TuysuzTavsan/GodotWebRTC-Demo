@@ -44,3 +44,9 @@ Project tested with:
 --------
 ALSO DO NOT FORGET TO CHANGE SERVER IP ADDRESS AND PORT. IT IS LOCATED AT THE FIRST LINES ON CLIENT.GD. IF YOU CHANGE THE PORT CHANGE SERVER PROJECTS PORT ALSO!
 --------
+
+-----
+RESOURCES
+-----
+Game scene background art: https://analogstudios.itch.io/islands 
+Pirate character art: https://seartsy.itch.io/free-pirate
