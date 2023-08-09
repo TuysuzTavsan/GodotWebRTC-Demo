@@ -16,12 +16,12 @@ Project files include webrtc extension for 4.0.3 if you want to use different ve
 
 
 
-Code is designed to support mesh network.
-When the lobby owner starts game, server will send each pear which peers it needs to establish connection.
-We store multiplayer information on a global singleton = User.gd.
-User.gd has a Client which is a class with websocket connection = Client.gd.
-Scene hierarchy: Main >> Intro >> Main Menu >> LOBBY MENU >> IN LOBBY MENU >> GAME SCENE
-when any peer connects to each other they will add a player with their peer id as multiplayer authority.
+Code is designed to support mesh network. <br />
+When the lobby owner starts game, server will send each pear which peers it needs to establish connection.<br />
+We store multiplayer information on a global singleton = User.gd.<br />
+User.gd has a Client which is a class with websocket connection = Client.gd.<br />
+Scene hierarchy: Main >> Intro >> Main Menu >> LOBBY MENU >> IN LOBBY MENU >> GAME SCENE<br />
+when any peer connects to each other they will add a player with their peer id as multiplayer authority.<br />
 
 ----------
 You can use this project as a multiplayer template and build further.
