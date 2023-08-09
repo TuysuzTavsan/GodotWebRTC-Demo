@@ -1,14 +1,19 @@
 # GodotMultiplayerDemo
+
 Godot multiplayer demo via webrtc + signaling server.
 Main purpose of this project is making a minimal multiplayer game with lobby system via webrtc and signaling server.
-Using game engine Godot version 4.1.1
-Project files include webrtc extension for 4.1 if you want to use different version of godot make sure you also change webrtc extension.
 This project is finished since I reached my goal for this one.
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-projects:
+---------------------------------------
+USING GAME ENGINE GODOT VERSION 4.0.3
+Project files include webrtc extension for 4.0.3 if you want to use different version of godot make sure you also change webrtc extension.
+----------------------------------------
+------------------------------
+2 Seperate Projects:
 1-Client
 2-Server (signaling server for webrtc)
+-------------------------------
+
 
 Code is designed to support mesh network.
 When the lobby owner starts game, server will send each pear which peers it needs to establish connection.
@@ -34,5 +39,6 @@ Project tested with:
 2- Server runs windows server on seperate location. Client runs on different locations. (Tested with friends)
 3- Server runs on Ubuntu server on seperate location. Client runs on different locations. (Tested with friends)
 
+--------
 ALSO DO NOT FORGET TO CHANGE SERVER IP ADDRESS AND PORT. IT IS LOCATED AT THE FIRST LINES ON CLIENT.GD. IF YOU CHANGE THE PORT CHANGE SERVER PROJECTS PORT ALSO!
-
+--------
