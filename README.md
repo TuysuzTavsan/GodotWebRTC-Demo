@@ -31,8 +31,10 @@ However 2 things you need to be aware of are =
 1- Lobbys are not getting deleted after game starts (I did not add this feature)
 2- You can find a better way to set player names (I set them in player_character.gd it was a temporary solution.)
 
+----------
 If you use this project in any way you dont need to credit to me.
 However please do not post this in anywhere without making any changes to it as if it was your project (as it is)
+----------
 
 Project tested with:
 1- Server and client runs on same pc.
