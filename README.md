@@ -5,7 +5,7 @@ Main purpose of this project is making a minimal multiplayer game with lobby sys
 This project is finished since I reached my goal for this one.
 
 ---------------------------------------
-USING GAME ENGINE GODOT VERSION 4.0.3
+USING GAME ENGINE GODOT VERSION 4.0.3.
 Project files include webrtc extension for 4.0.3 if you want to use different version of godot make sure you also change webrtc extension.
 ----------------------------------------
 ------------------------------
