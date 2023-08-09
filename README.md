@@ -41,6 +41,11 @@ Project tested with:
 2- Server runs windows server on seperate location. Client runs on different locations. (Tested with friends)
 3- Server runs on Ubuntu server on seperate location. Client runs on different locations. (Tested with friends)
 
+-----
+Youtube Showcase link:
+https://www.youtube.com/watch?v=aztZ2aokEZE
+-----
+
 --------
 ALSO DO NOT FORGET TO CHANGE SERVER IP ADDRESS AND PORT. IT IS LOCATED AT THE FIRST LINES ON CLIENT.GD. IF YOU CHANGE THE PORT CHANGE SERVER PROJECTS PORT ALSO!
 --------
