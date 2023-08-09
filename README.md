@@ -26,12 +26,11 @@ lobby menu will instantiate in-lobby-menu
 when game starts User.gd will free in-lobby-menu scene and instantiate game loop scene
 when any peer connects to each other they will add a player with their peer id as multiplayer authority.
 
+----------
 You can use this project as a multiplayer template and build further.
 However 2 things you need to be aware of are =
 1- Lobbys are not getting deleted after game starts (I did not add this feature)
 2- You can find a better way to set player names (I set them in player_character.gd it was a temporary solution.)
-
-----------
 If you use this project in any way you dont need to credit to me.
 However please do not post this in anywhere without making any changes to it as if it was your project (as it is)
 ----------
